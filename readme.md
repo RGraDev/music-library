@@ -9,5 +9,3 @@ a table of artists. The project makes use of the following languages, technologi
 - SQL (Postgres)
 - Docker (To run the database server within a container)
 - Mocha, Chai & Supertest (Testing frameworks)
-- Dotenv (Management of environment variables)
-- Nodemon
