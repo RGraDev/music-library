@@ -23,7 +23,7 @@ const read = async (_, res) => {
 const getArtistByID = async (req, res) => {
   const { id } = req.params;
   try {
-    const { rows: [artist] } = await db.query(`SELECT * FROM artists WHERE id = ${id}`);
+    const { rows: [artist] } = await db.query('SELECT * FROM artists WHERE id = $1', [id]);
 
     if (!artist) {
       return res.status(404).json({ message: `artist ${id} does not exist` })
@@ -85,4 +85,20 @@ const updateArtistByID = async (req, res) => {
   }
 }
 
-module.exports = { createArtist, read, getArtistByID, putArtist, updateArtistByID }
+const deleteArtistByID = async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const { rows: [artist] } = await db.query('DELETE FROM artists WHERE id = $1 RETURNING *', [id])
+
+    if (!artist) {
+      return res.status(404).json({ message: `artist ${id} does not exist` })
+    }
+
+    res.status(200).json(artist)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }
+}
+
+module.exports = { createArtist, read, getArtistByID, putArtist, updateArtistByID, deleteArtistByID }
